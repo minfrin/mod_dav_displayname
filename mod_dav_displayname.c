@@ -30,6 +30,7 @@
  *
  */
 
+#include <apr_escape.h>
 #include <apr_strings.h>
 
 #include "httpd.h"
@@ -86,6 +87,46 @@ static const dav_liveprop_group dav_displayname_liveprop_group =
     &dav_hooks_liveprop_displayname
 };
 
+static const char *dav_displayname_render(const dav_resource *resource)
+{
+	char *uri;
+	char *end, *begin;
+
+	apr_pool_t *p = resource->pool;
+	uri = apr_pstrdup(p, resource->uri);
+
+	end = strrchr(uri, '/');
+
+	/* no ending slash? name is the URL */
+	if (!end) {
+		return apr_punescape_url(p, uri, NULL, NULL, 0);
+	}
+
+	/* trailing slash? */
+	if (end && end[1] == 0) {
+
+		/* chop off trailing slash */
+		end[0] = 0;
+
+		begin = strrchr(uri, '/');
+
+		/* trailing slash, but no previous slash? name is the URL */
+		if (!begin) {
+			return apr_punescape_url(p, uri, NULL, NULL, 0);
+		}
+		else {
+			return apr_punescape_url(p, begin + 1, NULL, NULL, 0);
+		}
+
+	}
+
+	/* no trailing slash? name is everything after the slash */
+	else {
+		return apr_punescape_url(p, end + 1, NULL, NULL, 0);
+	}
+
+}
+
 static dav_prop_insert dav_displayname_insert_prop(const dav_resource *resource,
         int propid, dav_prop_insert what, apr_text_header *phdr)
 {
@@ -127,6 +168,7 @@ static dav_prop_insert dav_displayname_insert_prop(const dav_resource *resource,
             apr_text_append(p, phdr, apr_psprintf(p, "<lp%d:%s>",
                     global_ns, info->name));
 
+            apr_text_append(p, phdr, apr_pescape_entity(p, dav_displayname_render(resource), 0));
 
             apr_text_append(p, phdr, apr_psprintf(p, "</lp%d:%s>" DEBUG_CR,
                     global_ns, info->name));
