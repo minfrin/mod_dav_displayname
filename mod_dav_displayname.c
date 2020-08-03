@@ -89,7 +89,7 @@ static const dav_liveprop_group dav_displayname_liveprop_group =
 
 static const char *dav_displayname_render(const dav_resource *resource)
 {
-	char *uri;
+	char *uri, *name;
 	char *end, *begin;
 
 	apr_pool_t *p = resource->pool;
@@ -99,11 +99,11 @@ static const char *dav_displayname_render(const dav_resource *resource)
 
 	/* no ending slash? name is the URL */
 	if (!end) {
-		return apr_punescape_url(p, uri, NULL, NULL, 0);
+		name = uri;
 	}
 
 	/* trailing slash? */
-	if (end && end[1] == 0) {
+	else if (end && end[1] == 0) {
 
 		/* chop off trailing slash */
 		end[0] = 0;
@@ -112,19 +112,27 @@ static const char *dav_displayname_render(const dav_resource *resource)
 
 		/* trailing slash, but no previous slash? name is the URL */
 		if (!begin) {
-			return apr_punescape_url(p, uri, NULL, NULL, 0);
+			name = uri;
 		}
 		else {
-			return apr_punescape_url(p, begin + 1, NULL, NULL, 0);
+			name = begin + 1;
 		}
 
 	}
 
 	/* no trailing slash? name is everything after the slash */
 	else {
-		return apr_punescape_url(p, end + 1, NULL, NULL, 0);
+		name = end + 1;
 	}
 
+	/* does uri have a file type? */
+	end = strrchr(name, '.');
+
+	if (end) {
+		end[0] = 0;
+	}
+
+	return apr_punescape_url(p, name, NULL, NULL, 0);
 }
 
 static dav_prop_insert dav_displayname_insert_prop(const dav_resource *resource,
