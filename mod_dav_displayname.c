@@ -73,7 +73,7 @@ static const dav_liveprop_spec dav_displayname_props[] =
     {
         DAV_URI_DAV,
         "displayname",
-		DAV_PROPID_displayname,
+        DAV_PROPID_displayname,
         0
     },
 
@@ -89,50 +89,50 @@ static const dav_liveprop_group dav_displayname_liveprop_group =
 
 static const char *dav_displayname_render(const dav_resource *resource)
 {
-	char *uri, *name;
-	char *end, *begin;
+    char *uri, *name;
+    char *end, *begin;
 
-	apr_pool_t *p = resource->pool;
-	uri = apr_pstrdup(p, resource->uri);
+    apr_pool_t *p = resource->pool;
+    uri = apr_pstrdup(p, resource->uri);
 
-	end = strrchr(uri, '/');
+    end = strrchr(uri, '/');
 
-	/* no ending slash? name is the URL */
-	if (!end) {
-		name = uri;
-	}
+    /* no ending slash? name is the URL */
+    if (!end) {
+        name = uri;
+    }
 
-	/* trailing slash? */
-	else if (end && end[1] == 0) {
+    /* trailing slash? */
+    else if (end && end[1] == 0) {
 
-		/* chop off trailing slash */
-		end[0] = 0;
+        /* chop off trailing slash */
+        end[0] = 0;
 
-		begin = strrchr(uri, '/');
+        begin = strrchr(uri, '/');
 
-		/* trailing slash, but no previous slash? name is the URL */
-		if (!begin) {
-			name = uri;
-		}
-		else {
-			name = begin + 1;
-		}
+        /* trailing slash, but no previous slash? name is the URL */
+        if (!begin) {
+            name = uri;
+        }
+        else {
+            name = begin + 1;
+        }
 
-	}
+    }
 
-	/* no trailing slash? name is everything after the slash */
-	else {
-		name = end + 1;
-	}
+    /* no trailing slash? name is everything after the slash */
+    else {
+        name = end + 1;
+    }
 
-	/* does uri have a file type? */
-	end = strrchr(name, '.');
+    /* does uri have a file type? */
+    end = strrchr(name, '.');
 
-	if (end) {
-		end[0] = 0;
-	}
+    if (end) {
+        end[0] = 0;
+    }
 
-	return apr_punescape_url(p, name, NULL, NULL, 0);
+    return apr_punescape_url(p, name, NULL, NULL, 0);
 }
 
 static dav_prop_insert dav_displayname_insert_prop(const dav_resource *resource,
@@ -150,9 +150,9 @@ static dav_prop_insert dav_displayname_insert_prop(const dav_resource *resource,
     switch (propid) {
     case DAV_PROPID_displayname:
 
-    	if (!conf->dav_displayname) {
+        if (!conf->dav_displayname) {
             return DAV_PROP_INSERT_NOTDEF;
-    	}
+        }
 
         /* property allowed, handled below */
         break;
