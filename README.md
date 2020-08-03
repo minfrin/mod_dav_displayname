@@ -17,10 +17,9 @@ Use with the [mod\_dav\_autoindex](https://github.com/minfrin/mod_dav_autoindex)
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="index.xsl"?>
 <D:multistatus xmlns:D="DAV:" xmlns:ns0="DAV:">
 <D:response xmlns:lp1="DAV:">
-<D:href>/calendars/The%20Lazy%20Dog.txt</D:href>
+<D:href>/storage/The%20Lazy%20Dog.txt</D:href>
 <D:propstat>
 <D:prop>
 <lp1:displayname>The Lazy Dog</lp1:displayname>
