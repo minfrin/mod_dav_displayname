@@ -3,6 +3,17 @@ Module that makes the name of a resource or a collection available as the DAV:di
 
 Use with the [mod\_dav\_autoindex](https://github.com/minfrin/mod_dav_autoindex) module to provide human readable filenames in the XML output.
 
+## Download:
+
+RPM Packages are available at
+[COPR](https://copr.fedorainfracloud.org/coprs/minfrin/mod_dav_displayname/) for EPEL,
+Fedora and OpenSUSE.
+
+```
+dnf copr enable minfrin/mod_dav_displayname
+dnf install mod_dav_displayname
+```
+
 ## basic configuration
 
 ```
