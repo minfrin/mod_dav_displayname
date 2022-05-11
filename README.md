@@ -14,6 +14,9 @@ dnf copr enable minfrin/mod_dav_displayname
 dnf install mod_dav_displayname
 ```
 
+Ubuntu packages are available through
+[PPA](https://launchpad.net/~minfrin/+archive/ubuntu/apache2/).
+
 ## basic configuration
 
 ```
